@@ -7,7 +7,7 @@ import java.io.PrintWriter;
 /**
 * Class for computing Hamming codes.
 */
-public class HammingCoder {
+public class HammingCoderPro {
   static int getParityBit(int[] hammingCodeWithBlanks, int parityPosition) {
     int i;
     int j;
