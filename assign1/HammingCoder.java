@@ -8,25 +8,25 @@ import java.io.PrintWriter;
 * Class for computing Hamming codes.
 */
 public class HammingCoder {
-  static int getParityBit(int[] hammingCodeWithBlanks, int parityPosition) {
+  static int getParityBit(int[] hammingCodeWithBlanks, int parityIndex) {
     int i;
     int j;
     int sum = 0;
     int length = hammingCodeWithBlanks.length;
 
-    if (parityPosition != 1) {
-      for (i = parityPosition; i < length; i += 2 * parityPosition) {
-        for (j = 0; j < parityPosition && (i + j - 1) < length; j++) {
-          sum += hammingCodeWithBlanks[i + j - 1];
+    // First loop increments double the parity position.
+    for (i = parityIndex; i < length; i += 2 * (parityIndex + 1)) {
+      // Second loop add the first half to the sum.
+      for (j = 0; j < parityIndex + 1 && (i + j) < length; j++) {
+        // Make sure we don't count the parity bit itself.
+        if (i + j != parityIndex) {
+          sum += hammingCodeWithBlanks[i + j];
         }
-      }
-    } else {
-      for (i = 2; i < length; i += 2) {
-        sum += hammingCodeWithBlanks[i];
       }
     }
 
-    return sum % 2 != 0 ? 1 : 0;
+    // Check is the sum is even then return 0, if odd return 1.
+    return sum % 2 == 0 ? 0 : 1;
   }
 
   /**
@@ -62,7 +62,7 @@ public class HammingCoder {
       // Check if the position of the bit is the next power of 2.
       if (i + 1 == Math.pow(2, exponentIterator)) {
         // Set the parity bit to the right value.
-        hammingCode[i] = getParityBit(hammingCode, i + 1);
+        hammingCode[i] = getParityBit(hammingCode, i);
         // hammingCode[i] = 7;
         exponentIterator++;
       }
